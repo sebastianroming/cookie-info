@@ -1,0 +1,40 @@
+#cookie-info-bar {
+	width:				100%;
+	position:			fixed;
+	top:				0;
+	left:				0;
+	height:				auto;
+	background-color:	#404040;
+	color:				#FFFFFF;
+	z-index:			999999;			/* overlay the wordpress admin bar in frontend */
+	display:			none;
+}
+
+#cookie-info-bar-message {
+	float:				left;
+	width:				80%;
+	padding:			15px;
+}
+
+#cookie-info-bar-buttons {
+	float:				right;
+	padding:			12px 25px
+}
+
+#cookie-info-bar-buttons button {
+	background:			#707070;
+	border:				none;
+	border-radius:		4px;
+	color:				#FFFFFF;
+	cursor:				pointer;
+	padding:			5px 30px;
+	margin-left:		5px;
+}
+
+#cookie-info-bar-buttons button:hover {
+	background:			#989898;
+}
+
+#cookie-info-bar-clearer {
+	clear:				both;
+}
