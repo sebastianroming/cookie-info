@@ -3,9 +3,10 @@ namespace sebastianroming\CookieInfo;
 
 class Core {
 	
-	const PLUGIN_VERSION 				= '0.1.0';
+	const PLUGIN_VERSION 				= '0.1.1';
 	
 	public $pluginSettings				= Array(
+		'pluginSettingsSlug'						=> 'cookie-info-settings',
 		'pluginFile'								=> '',
 		'pluginBasename'							=> '',
 		'pluginDir'									=> '',
@@ -13,8 +14,6 @@ class Core {
 		'scriptUrl'									=> '',
 		'styleUrl'									=> '',
 	);
-	
-	public $settingsSlug				= 'cookie-info-settings';
 		
 	private $__defaultSettings			= Array(
         'cookie-info-settings-is-active' 			=> true,
@@ -22,8 +21,8 @@ class Core {
         'cookie-info-settings-moreinfo-is-active' 	=> true,
         'cookie-info-settings-moreinfo-button-text' => 'Mehr erfahren',
         'cookie-info-settings-message' 				=> 'Cookies helfen uns bei der Bereitstellung unserer Dienste. Durch die Nutzung unserer Dienste erklären Sie sich damit einverstanden, dass wir Cookies setzen.',
+		'cookie-info-settings-style'				=> 'top',
     );
-	
 	
 	
 	// ---------------------------------------------
@@ -40,6 +39,14 @@ class Core {
 		
 	}
 	
+	
+	
+	/******************************************
+	 *
+	 * WORDPRESS 
+	 *
+	 ******************************************/
+	
 	// ---------------------------------------------
 	protected function addHooks() {
 		
@@ -54,43 +61,6 @@ class Core {
 		add_action( 'wp_enqueue_scripts', 		array($this, 'loadFrontendScripts') );
 		add_action( 'admin_enqueue_scripts', 	array($this, 'loadBackendScripts') );
 		add_action( 'wp_footer', 				array($this, 'showCookieInfoBar') );
-		
-	}
-	
-	// ---------------------------------------------
-	public function showCookieInfoBar() {
-		
-		$bIsActivated = $this->__getBooleanOption($this->settingsSlug . '-is-active');
-
-		if ($bIsActivated === true) {
-			
-			$outputHtml		 = '<div id="cookie-info-bar">';
-			$outputHtml		.= '<div id="cookie-info-bar-message"></div>';
-			$outputHtml		.= '<div id="cookie-info-bar-buttons"><button id="cookie-info-bar-buttons-accept"></button>';
-			
-			if ( $this->__getBooleanOption($this->settingsSlug . '-moreinfo-is-active') == true) {
-				$outputHtml		.= '<button id="cookie-info-bar-buttons-moreinfo"></button>';
-			}
-			
-			$outputHtml		.= '</div>';
-			$outputHtml		.= '<div id="cookie-info-bar-clearer"></div>';
-			$outputHtml		.= '</div>';
-			
-		
-			$outputHtml		.= '<script type="text/javascript">';
-			$outputHtml		.= '	jQuery(document).ready(function() {';
-			$outputHtml		.= '		var settings = {';
-			$outputHtml		.= '			messageText: "' . $this->__getOption($this->settingsSlug . '-message') . '",';
-			$outputHtml		.= '			okButtonText: "' . $this->__getOption($this->settingsSlug . '-ok-button-text') . '",';
-			$outputHtml		.= '			moreInfoButtonText: "' . $this->__getOption($this->settingsSlug . '-moreinfo-button-text') . '",';
-			$outputHtml		.= '			moreInfoButtonIsActive: "' . $this->__getBooleanOption($this->settingsSlug . '-moreinfo-is-active') . '",';
-			$outputHtml		.= '		};';
-			$outputHtml		.= '		CookieInfo(settings);';
-			$outputHtml		.= '	});';
-			$outputHtml		.= '</script>';
-			
-			echo $outputHtml;
-		}
 		
 	}
 	
@@ -134,6 +104,67 @@ class Core {
 		wp_enqueue_style( 'cookie-info-admin-style' );
 		
 	}
+	
+	
+	
+	/******************************************
+	 *
+	 * COOKIE-INFO
+	 *
+	 ******************************************/
+	
+	// ---------------------------------------------
+	public function showCookieInfoBar() {
+		
+		$bIsActivated = $this->__getBooleanOption($this->pluginSettings['pluginSettingsSlug'] . '-is-active');
+
+		if ($bIsActivated === true) {
+			
+			$cookieInfoBarStyle	= $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-style');	// bottom
+			
+			$outputHtml		 = '';
+			if ($cookieInfoBarStyle == 'top') {
+				$outputHtml	.= '<div id="cookie-info-bar">';
+			} elseif ($cookieInfoBarStyle == 'bottom') {
+				$outputHtml	.= '<div id="cookie-info-bar-style-bottom">';
+			}
+			$outputHtml		.= '<div id="cookie-info-bar-message"></div>';
+			$outputHtml		.= '<div id="cookie-info-bar-buttons"><button id="cookie-info-bar-buttons-accept"></button>';
+			
+			if ( $this->__getBooleanOption($this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-is-active') == true) {
+				$outputHtml		.= '<button id="cookie-info-bar-buttons-moreinfo"></button>';
+			}
+			
+			$outputHtml		.= '</div>';
+			$outputHtml		.= '<div id="cookie-info-bar-clearer"></div>';
+			$outputHtml		.= '</div>';
+			
+		
+			$outputHtml		.= '<script type="text/javascript">';
+			$outputHtml		.= '	jQuery(document).ready(function() {';
+			$outputHtml		.= '		var settings = {';
+			$outputHtml		.= '			messageText: "' . $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-message') . '",';
+			$outputHtml		.= '			okButtonText: "' . $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-ok-button-text') . '",';
+			$outputHtml		.= '			moreInfoButtonText: "' . $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-button-text') . '",';
+			$outputHtml		.= '			moreInfoButtonIsActive: "' . $this->__getBooleanOption($this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-is-active') . '",';
+			$outputHtml		.= '			cookieInfoBarStyle: "' . $cookieInfoBarStyle . '",';
+			$outputHtml		.= '		};';
+			$outputHtml		.= '		CookieInfo(settings);';
+			$outputHtml		.= '	});';
+			$outputHtml		.= '</script>';
+			
+			echo $outputHtml;
+		}
+		
+	}
+	
+	
+	
+	/******************************************
+	 *
+	 * HELPERS
+	 *
+	 ******************************************/
 		
 	// ---------------------------------------------
 	public function getBaseUrl($aParams = null) {
@@ -168,7 +199,7 @@ class Core {
 	
 	// ---------------------------------------------
 	public function addToSettingsMenu() {
-		add_options_page( 'Einstellungen', 'Cookie-Info', 'manage_options', $this->settingsSlug, array($this, 'showSettingsPage'));
+		add_options_page( 'Einstellungen', 'Cookie-Info', 'manage_options', $this->pluginSettings['pluginSettingsSlug'], array($this, 'showSettingsPage'));
 	}
 	
 	// ---------------------------------------------
@@ -184,28 +215,14 @@ class Core {
 		
 			echo '<div id="cookie-info-column-left">';
 			echo '<form method="post" action="options.php" id="cookie-info-settings-form">';
-			echo settings_fields( $this->settingsSlug );
-			echo do_settings_sections( $this->settingsSlug );
+			echo settings_fields( $this->pluginSettings['pluginSettingsSlug'] );
+			echo do_settings_sections( $this->pluginSettings['pluginSettingsSlug'] );
 			submit_button();
 			echo '</form>';
 			echo '</div>';
 			
 			echo '<div id="cookie-info-column-right">';
-			echo '<div id="cookie-info-about">';
-			echo '<h2>Entwickler</h2>';
-			echo '<p>Sebastian Roming<br /><a href="http://sebastianroming.github.io">sebastianroming.github.io</a></p><br />';
-			echo '<h3>Infos zum Plugin</h3>';
-			echo '<ul>';
-			echo '<li><a href="http://github.com/sebastianroming/cookie-info" target="_blank">GitHub</a></li>';
-			echo '<li><a href="https://github.com/sebastianroming/cookie-info/wiki" target="_blank">Anleitung</a></li>';
-			echo '<li><a href="https://github.com/sebastianroming/cookie-info/issues" target="_blank">Fehler &amp; Wünsche melden</a></li>';
-			echo '</ul><br />';
-			echo '<h3>Spenden</h3>';
-			echo '<p>(hier noch den Link zu PayPal hinzufügen...)</p><br />';
-			
-			echo '<h3>Dir gefällt das Plugin?</h3>';
-			echo '<p>Wenn das Plugin hilfreich ist, dann freue ich mich über eine Gute Bewertung auf <a href="http://wordpress.org/plugins/cookie-info" target="_blank">WordPress.org</a>.</p>';
-			echo '</div>';
+			$this->_showAboutSection();
 			echo '</div>';
 			
 			echo '<div id="cookie-info-column-clearer"></div>';
@@ -214,16 +231,38 @@ class Core {
 	}
 	
 	// ---------------------------------------------
+	protected function _showAboutSection() {
+		
+		echo '<div id="cookie-info-about">';
+		echo '<h2>Entwickler</h2>';
+		echo '<p>Sebastian Roming<br /><a href="http://sebastianroming.github.io">sebastianroming.github.io</a></p><br />';
+		echo '<h3>Infos zum Plugin</h3>';
+		echo '<ul>';
+		echo '<li><a href="http://github.com/sebastianroming/cookie-info" target="_blank">GitHub</a></li>';
+		echo '<li><a href="https://github.com/sebastianroming/cookie-info/wiki" target="_blank">Anleitung</a></li>';
+		echo '<li><a href="https://github.com/sebastianroming/cookie-info/issues" target="_blank">Fehler &amp; Wünsche melden</a></li>';
+		echo '</ul><br />';
+		echo '<h3>Spenden</h3>';
+		echo '<p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="8YYGJXLHATY2A"><input type="image" src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal."><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1"></form></p><br />';
+		
+		echo '<h3>Dir gefällt das Plugin?</h3>';
+		echo '<p>Wenn das Plugin hilfreich ist, dann freue ich mich über eine Gute Bewertung auf <a href="http://wordpress.org/plugins/cookie-info" target="_blank">WordPress.org</a>.</p>';
+		echo '</div>';
+		
+	}
+	
+	// ---------------------------------------------
 	public function registerSettings() {
 		
 		$this->_addSettingsSections();
 		$this->_addSettingsFields();
 		
-		register_setting($this->settingsSlug, $this->settingsSlug . '-is-active');
-		register_setting($this->settingsSlug, $this->settingsSlug . '-ok-button-text');
-		register_setting($this->settingsSlug, $this->settingsSlug . '-moreinfo-is-active');
-		register_setting($this->settingsSlug, $this->settingsSlug . '-moreinfo-button-text');
-		register_setting($this->settingsSlug, $this->settingsSlug . '-message');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-is-active');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-ok-button-text');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-is-active');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-button-text');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-message');
+		register_setting($this->pluginSettings['pluginSettingsSlug'], $this->pluginSettings['pluginSettingsSlug'] . '-style');
 		
 	}
 	
@@ -231,10 +270,10 @@ class Core {
 	protected function _addSettingsSections() {
 		
 		add_settings_section(
-			$this->settingsSlug . '-section-general',
+			$this->pluginSettings['pluginSettingsSlug'] . '-section-general',
 			'Allgemeine Einstellungen',
 			null,
-			$this->settingsSlug
+			$this->pluginSettings['pluginSettingsSlug']
 		);
 		
 	}
@@ -243,64 +282,72 @@ class Core {
 	protected function _addSettingsFields() {
 		
 		add_settings_field(
-            $this->settingsSlug . '-is-active',
+            $this->pluginSettings['pluginSettingsSlug'] . '-is-active',
             'Cookie-Info aktiv',
             array($this, 'fieldIsActive'),
-            $this->settingsSlug,
-            $this->settingsSlug . '-section-general'
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
         );
 		
 		add_settings_field(
-            $this->settingsSlug . '-ok-button-text',
+            $this->pluginSettings['pluginSettingsSlug'] . '-ok-button-text',
             'Beschriftung OK-Button',
             array($this, 'okButtonText'),
-            $this->settingsSlug,
-            $this->settingsSlug . '-section-general'
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
         );
 		
 		add_settings_field(
-            $this->settingsSlug . '-moreinfo-is-active',
+            $this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-is-active',
             'Mehr Info aktiv',
             array($this, 'fieldMoreInfoIsActive'),
-            $this->settingsSlug,
-            $this->settingsSlug . '-section-general'
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
         );
 		
 		add_settings_field(
-            $this->settingsSlug . '-moreinfo-button-text',
+            $this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-button-text',
             'Beschriftung Mehr Info-Button',
             array($this, 'moreinfoButtonText'),
-            $this->settingsSlug,
-            $this->settingsSlug . '-section-general'
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
         );
 		
 		add_settings_field(
-            $this->settingsSlug . '-message',
+            $this->pluginSettings['pluginSettingsSlug'] . '-message',
             'Hinweistext',
             array($this, 'message'),
-            $this->settingsSlug,
-            $this->settingsSlug . '-section-general'
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
+        );
+		
+		add_settings_field(
+            $this->pluginSettings['pluginSettingsSlug'] . '-style',
+            'Darstellung',
+            array($this, 'cookieInfoBarStyle'),
+            $this->pluginSettings['pluginSettingsSlug'],
+            $this->pluginSettings['pluginSettingsSlug'] . '-section-general'
         );
 		
 	}
 	
 	// ---------------------------------------------
 	public function fieldIsActive() {
-		$this->__addSettingsCheckbox($this->settingsSlug . '-is-active', 'Der Hinweis wird angezeigt');
+		$this->__addSettingsCheckbox($this->pluginSettings['pluginSettingsSlug'] . '-is-active', 'Der Hinweis wird angezeigt');
 	}
 	
 	// ---------------------------------------------
 	public function fieldMoreInfoIsActive() {
-		$this->__addSettingsCheckbox($this->settingsSlug . '-moreinfo-is-active', 'Der Button wird angezeigt');
+		$this->__addSettingsCheckbox($this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-is-active', 'Der Button wird angezeigt');
 	}
 	
 	// ---------------------------------------------
 	public function okButtonText() {
 		
 		$this->__addSettingsInput(
-            $this->settingsSlug . '-ok-button-text',
+            $this->pluginSettings['pluginSettingsSlug'] . '-ok-button-text',
 			null,
-            $this->__getOption($this->settingsSlug . '-ok-button-text')
+            $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-ok-button-text')
         );
 	}
 	
@@ -308,9 +355,9 @@ class Core {
 	public function moreinfoButtonText() {
 		
 		$this->__addSettingsInput(
-            $this->settingsSlug . '-moreinfo-button-text',
+            $this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-button-text',
             'Nur relevant, sofern der Button aktiv ist.',
-            $this->__getOption($this->settingsSlug . '-moreinfo-button-text')
+            $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-moreinfo-button-text')
         );
 		
 	}
@@ -319,9 +366,20 @@ class Core {
 	public function message() {
 		
 		$this->__addSettingsInput(
-            $this->settingsSlug . '-message',
+            $this->pluginSettings['pluginSettingsSlug'] . '-message',
             null,
-            $this->__getOption($this->settingsSlug . '-message')
+            $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-message')
+        );
+		
+	}
+	
+	// ---------------------------------------------
+	public function cookieInfoBarStyle() {
+		
+		$this->__addSettingsSelect(
+            $this->pluginSettings['pluginSettingsSlug'] . '-style',
+            Array('top' => 'Top-Bar', 'bottom' => 'Bottom-Box'),
+            $this->__getOption($this->pluginSettings['pluginSettingsSlug'] . '-style')
         );
 		
 	}
@@ -349,6 +407,16 @@ class Core {
             $description
         );
 		
+    }
+	
+	// ---------------------------------------------
+	private function __addSettingsSelect($name, $options, $selectedValue) {
+        echo '<select name="' . $name . '">';
+        foreach ($options as $value => $label) {
+            echo '<option value="' . $value . '"' . ($selectedValue == $value ? ' selected="selected"' : '') . '>';
+            echo $label . '</option>';
+        }
+        echo '</select>';
     }
 	
 	// ---------------------------------------------

@@ -38,3 +38,27 @@
 #cookie-info-bar-clearer {
 	clear:				both;
 }
+
+#cookie-info-bar-style-bottom {
+	width:				400px;
+	position:			fixed;
+	right:				20px;
+	bottom:				0;
+	height:				180px;
+	background-color:	#404040;
+	color:				#FFFFFF;
+	text-align:			center;
+	display:			none;
+}
+
+#cookie-info-bar-style-bottom #cookie-info-bar-message {
+	float:				none;
+	width:				auto;
+	padding:			15px;
+}
+
+#cookie-info-bar-style-bottom #cookie-info-bar-buttons {
+	float:				none;
+	width:				auto;
+	padding:			12px 25px
+}

@@ -3,6 +3,7 @@ function CookieInfo(settings) {
 	settings					= settings 								|| {};
 	var cookieName				= settings['cookieName'] 				|| 'CookieInfoReadAndAgreed';
 	var cookieBarId				= settings['cookieBarId'] 				|| 'cookie-info-bar';
+	var cookieBarIdBottomStyle	= settings['cookieBarId'] 				|| 'cookie-info-bar-style-bottom';
 	var messageId				= settings['messageId'] 				|| 'cookie-info-bar-message';
 	var messageText				= settings['messageText'] 				|| 'Cookies helfen uns bei der Bereitstellung unserer Dienste. Durch die Nutzung unserer Dienste erklären Sie sich damit einverstanden, dass wir Cookies setzen.';
 	var okButtonId				= settings['okButtonId']				|| 'cookie-info-bar-buttons-accept';
@@ -12,6 +13,40 @@ function CookieInfo(settings) {
 	var moreInfoButtonText		= settings['moreInfoButtonText']		|| 'Mehr erfahren';
 	var delay					= settings['delay']						|| 800;
 	var daysToExpire			= settings['daysToExpire'] 				|| 365;
+	var cookieInfoBarStyle		= settings['cookieInfoBarStyle'] 		|| 'top';
+	
+	var CookieInfoHandler = {
+		acceptCookiePolicyAndClose: function() {
+			
+			Cookie.set(cookieName, 'yes', daysToExpire);
+			
+			if (cookieInfoBarStyle == 'top') {
+				jQuery('#' + cookieBarId).slideUp(delay);
+			} else if (cookieInfoBarStyle == 'bottom') {
+				jQuery('#' + cookieBarIdBottomStyle).slideUp(delay);
+			}
+			
+			return false;
+		},
+		displayInfoBar: function() {
+			
+			if (cookieInfoBarStyle == 'top') {
+				jQuery('#' + cookieBarId).slideDown(delay);
+			} else if (cookieInfoBarStyle == 'bottom') {
+				jQuery('#' + cookieBarIdBottomStyle).slideDown(delay);
+			}
+			
+		},
+		hideInfoBar: function() {
+			
+			if (cookieInfoBarStyle == 'top') {
+				jQuery('#' + cookieBarId).slideUp(delay);
+			} else if (cookieInfoBarStyle == 'bottom') {
+				jQuery('#' + cookieBarIdBottomStyle).slideUp(delay);
+			}
+			
+		}
+	};
 	
 	var Cookie = {
 		set: function(name, value, days) {
@@ -42,20 +77,6 @@ function CookieInfo(settings) {
 		},
 		exists: function(name) {
 			return (this.read(name) !== null);
-		}
-	};
-	
-	var CookieInfoHandler = {
-		acceptCookiePolicyAndClose: function() {
-			Cookie.set(cookieName, 'yes', daysToExpire);
-			jQuery('#' + cookieBarId).slideUp(delay);
-			return false;
-		},
-		displayInfoBar: function() {
-			jQuery('#' + cookieBarId).slideDown(delay);
-		},
-		hideInfoBar: function() {
-			jQuery('#' + cookieBarId).slideUp(delay);
 		}
 	};
 	
