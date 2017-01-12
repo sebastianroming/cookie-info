@@ -27,10 +27,15 @@ Siehe [GitHub Issues](https://github.com/sebastianroming/cookie-info/issues)
 
 == Changelog ==
 
-= 1.0 = 
+= 1.1 =
+* Neuer Stil: Bottom-Full-Width
+* Stil entfernt: Top
+* Es ist nun möglich, einen Link auf eine Wordpress-Seite zu setzen
+
+= 1.0 =
 * Erste Version des Plugins
 
 == Upgrade Notice ==
 
-= 1.0 = 
+= 1.0 =
 * Initial Plugin

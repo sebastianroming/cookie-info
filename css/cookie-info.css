@@ -1,8 +1,8 @@
 #cookie-info-bar {
 	width:				100%;
 	position:			fixed;
-	top:				0;
-	left:				0;
+	top:					0;
+	left:					0;
 	height:				auto;
 	background-color:	#404040;
 	color:				#FFFFFF;
@@ -39,6 +39,32 @@
 	clear:				both;
 }
 
+#cookie-info-bar-style-bottom-full {
+	position: fixed;
+	min-width: 100%;
+	height: auto;
+	z-index: 100000;
+	font-size: 13px;
+	line-height: 20px;
+	left: 0;
+	text-align: center;
+	bottom:0;
+	background-color:	#404040;
+	color:				#FFFFFF;
+	border-top: 1px #fff solid;
+	display:			none;
+}
+
+#cookie-info-bar-style-bottom-full #cookie-info-bar-message {
+	width:				auto;
+	padding:			15px;
+}
+
+#cookie-info-bar-style-bottom-full #cookie-info-bar-buttons {
+	width:				auto;
+	padding:			12px 25px
+}
+
 #cookie-info-bar-style-bottom {
 	width:				400px;
 	position:			fixed;
@@ -47,7 +73,7 @@
 	height:				180px;
 	background-color:	#404040;
 	color:				#FFFFFF;
-	text-align:			center;
+	text-align:		center;
 	display:			none;
 }
 
