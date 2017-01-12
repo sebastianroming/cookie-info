@@ -1,0 +1,33 @@
+#cookie-info-settings-form {
+	
+}
+
+#cookie-info-column-left {
+	float:				left;
+	width:				70%;
+}
+
+#cookie-info-column-right {
+	float:				right;
+	width:				30%;
+	height:				auto;
+	background-color:	#C0C0C0;
+}
+
+#cookie-info-about {
+	padding:25px;
+}
+
+#cookie-info-column-clearer {
+	clear:				both;
+}
+
+#cookie-info-settings-form input[type=text], 
+#cookie-info-settings-form select {
+	width:				50%;
+}
+
+input#cookie-info-settings-message {
+	width:				90% !important;
+}
+
