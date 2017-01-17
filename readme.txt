@@ -27,6 +27,9 @@ Siehe [GitHub Issues](https://github.com/sebastianroming/cookie-info/issues)
 
 == Changelog ==
 
+= 1.1.2 =
+* Cache-Probleme mit WordPress behoben
+
 = 1.1 =
 * Neuer Stil: Bottom-Full-Width
 * Stil entfernt: Top
