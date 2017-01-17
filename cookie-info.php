@@ -3,7 +3,7 @@
 Plugin Name: Cookie-Info
 Plugin URI: http://www.sebastianroming.de/wordpress-plugins/
 Description: Ein simples Plugin zur Konformität mit der EU Cookie Richtline
-Version: 0.1.2
+Version: 1.1.2
 Author: Sebastian Roming
 Author URI: http://www.sebastianroming.de
 License: GPL2
